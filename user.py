@@ -13,36 +13,36 @@ class BankUser:
         """
         TODO: complete this function that adds the current user to the bank database
         """
-       if self.user_name not in bank.database:
-            bank.database[self.user_name] = {
-                "password": self.__password,
-                "balance": 0.0
-            }
+        if not bank.find_user(self.user_name):
+            bank.create_user(self.user_name, self.__password)
         else:
-            raise ValueError("User already exists in the database.")
+            print("User already exists in the database.")
     
     def check_balance(self):
         """
         TODO: complete this function that returns the balance of the current user
         """
-      return self.bank.database[self.user_name]["balance"]
+        print(self.bank.get_balance(self.user_name, self.__password))
     
     def deposit(self, amount):
         """
         TODO: complete this function that deposits money into the current users account
         """
-    if amount <= 0:
-            raise ValueError("Deposit amount must be positive.")
-        self.bank.database[self.user_name]["balance"] += amount
+        if amount <= 0:
+                print("Deposit amount must be positive.")
+        else: 
+            self.bank.deposit(self.user_name, self.__password, amount)
+            print("Success.")
     
     def withdraw(self, amount):
         """
         TODO: complete this function that 
         """
 
- if amount <= 0:
-            raise ValueError("Withdrawal amount must be positive.")
-        if self.bank.database[self.user_name]["balance"] >= amount:
-            self.bank.database[self.user_name]["balance"] -= amount
+        if amount > 0:
+            if amount < self.bank.get_balance(self.user_name, self.__password):
+                self.bank.withdraw(self.user_name, self.__password, amount)
+            else:
+                print("Insufficient funds.")
         else:
-            raise ValueError("Insufficient funds.")
+            print("Withdrawal amount must be positive.")

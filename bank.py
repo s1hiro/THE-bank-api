@@ -118,12 +118,16 @@ class Bank:
 
         if amount > 0:
             if(self.__user_login(user_name, password)):
-                if(amount > self.__bank_data[str(user_name)]["balance"]):
+                if(amount < self.__bank_data[str(user_name)]["balance"]):
+                    amount = amount * -1
                     self.__process_transaction(user_name, amount)
+                    print("bank success")
                     return "Success"
                 else:
+                    print("bank fail")
                     return f"Please enter an amount less than your balance, which is ${self.get_balance(user_name, password)}"
         else:
+            print("bank fail greater than 0")
             return "Please enter an amount greater than 0."
         
 
