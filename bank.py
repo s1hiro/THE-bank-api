@@ -16,22 +16,22 @@ class Bank:
         #set the name of the bank
         self.bank_name = bank_name
         #where all the bank data will be stored
-        self.__bank_data = {}
+        self.__bank_data = {
+
+            "theuser": {
+
+                "password": "123#",
+                "balance": 1000
+            }
+        }
 
     def __user_login(self, user_name, password):
-        """
-        TODO: complete this function that logs in using the user
 
-        Make sure to check if the user exists within the bank database
-        Make sure to check if password given matches password in system
-
-        arguments:
-            user_name: the user name of the current user
-            password: the password given by the current user
-        returns:
-            True if user is successfully logged in, False otherwise
-        """
-        return ...
+        if user_name in self.__bank_data:
+            if(password == self.__bank_data[str(user_name)]["password"]):
+                return True
+        else:
+            return False
     
     def __process_transaction(self, user_name, amount):
         """
@@ -41,7 +41,11 @@ class Bank:
             user_name: the user name of the current user
             amount: the amount to change the current users balance by
         """
-        ...
+
+        if user_name in self.__bank_data:
+            self.__bank_data[str(user_name)]["balance"] += amount
+        else:
+            return "Invalid username."        
 
     def find_user(self, user_name):
         """
@@ -84,7 +88,10 @@ class Bank:
         returns:
             the current balance of the user
         """
-        ...
+
+        if self.__user_login(user_name, password):
+            return self.__bank_data[str(user_name)]["balance"]
+        
     
     def deposit(self, user_name, password, amount):
         """
@@ -94,7 +101,11 @@ class Bank:
         Make sure to use __user_login to ensure that user_name and password are a match
         Make sure to only use __process_transaction to make changes to the users balance, not directly
         """
-        ...
+
+        if amount > 0:
+            if(self.__user_login(user_name, password)):
+                self.__process_transaction(user_name, amount)
+        
 
     def withdraw(self, user_name, password, amount):
         """
@@ -104,4 +115,18 @@ class Bank:
         Make sure to use __user_login to ensure that user_name and password are a match
         Make sure to only use __process_transaction to make changes to the users balance, not directly
         """
-        ...
+
+        if amount > 0:
+            if(self.__user_login(user_name, password)):
+                if(amount > self.__bank_data[str(user_name)]["balance"]):
+                    self.__process_transaction(user_name, amount)
+                    return "Success"
+                else:
+                    return f"Please enter an amount less than your balance, which is ${self.get_balance(user_name, password)}"
+        else:
+            return "Please enter an amount greater than 0."
+        
+
+
+    def testLogin(self, username, password):
+        return self.__user_login(username, password)
